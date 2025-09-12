@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nai-cert
+  namespace: nai-system
+spec:
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+  secretName: nai-cert
+  commonName: nai.${NAI_UI_ENDPOINT}.nip.io         #Endpoint IP-Adress von oben eintragen
+  dnsNames:
+  - nai.${NAI_UI_ENDPOINT}.nip.io                   #Endpoint IP-Adress von oben eintragen
+  ipAddresses:
+  - ${NAI_UI_ENDPOINT}                              #Endpoint IP-Adress von oben eintragen
