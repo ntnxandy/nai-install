@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nai-chatapp
+  namespace: chat
+  labels:
+    app: nai-chatapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nai-chatapp
+  template:
+    metadata:
+      labels:
+        app: nai-chatapp
+    spec:
+      containers:
+      - name: nai-chatapp
+        image: johnugeorge/nai-chatapp:0.12
+        ports:
+        - containerPort: 8502
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
