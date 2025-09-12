@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: chat
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nai-chatapp
+  namespace: chat
+  labels:
+    app: nai-chatapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nai-chatapp
+  template:
+    metadata:
+      labels:
+        app: nai-chatapp
+    spec:
+      containers:
+      - name: nai-chatapp
+        image: johnugeorge/nai-chatapp:0.12
+        ports:
+        - containerPort: 8502
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nai-chatapp
+  namespace: chat
+spec:
+  selector:
+    app: nai-chatapp
+  ports:
+    - protocol: TCP
+      port: 8502
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: nai-chatapp-route
+  namespace: chat
+spec:
+  parentRefs:
+  - name: nai-ingress-gateway
+    namespace: nai-system
+  hostnames:
+  - "chat.nai.10.8.23.102.nip.io"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: nai-chatapp
+      kind: Service
+      port: 8502
