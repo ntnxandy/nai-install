@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: nai-chatapp-route
+  namespace: chat                   # Same namespace as your chat app service
+spec:
+  parentRefs:
+  - name: nai-ingress-gateway
+    namespace: nai-system           # Namespace of the Gateway
+  hostnames:
+  - "chat.nai.10.8.23.102.nip.io"    # Input Gateway IP address
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: nai-chatapp
+      kind: Service
+      port: 8502
