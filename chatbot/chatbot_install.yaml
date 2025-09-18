@@ -55,7 +55,7 @@ spec:
   - name: nai-ingress-gateway
     namespace: nai-system
   hostnames:
-  - "chat.nai.10.8.23.102.nip.io"
+  - "chat.nai.10.8.23.102.nip.io"                     #IP-Adresse von NAI eintragen!
   rules:
   - matches:
     - path:
